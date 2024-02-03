@@ -17,8 +17,12 @@
     <ProjectReference Include="..\XceedTask.Services\XceedTask.Services.csproj" />
   </ItemGroup>
 
+	
+
   <ItemGroup>
     <Folder Include="wwwroot\Logs\" />
   </ItemGroup>
+
+	
 
 </Project>

@@ -1,6 +1,6 @@
+using XceedTask.DataAccess.Interfaces;
 using XceedTask.Middleware;
 using XceedTask.SeedData;
-using XceedTask.DataAccess.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,3 +89,6 @@ app.UseMvc(routes =>
 });
 
 app.Run();
+
+public partial class Program
+{ }
