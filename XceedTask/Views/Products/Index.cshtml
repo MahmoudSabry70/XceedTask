@@ -1,0 +1,150 @@
+﻿@model IEnumerable<ProductViewModel>
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var error = TempData["Error"];
+    var success = TempData["Success"];
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+    ViewData["Title"] = lang == "En" ? "Product List" : "قائمة المنتجات";
+}
+
+
+
+
+<div class="card report-card">
+    <div class="card-body pb-0">
+        <div class="row">
+            <div class="col-md-12">
+
+                <h4 class="header-title mb-3">@(lang == "En" ? "Select the Category" : "حدد القسم")</h4>
+
+                <div class="mb-3">
+
+                    <select class="form-select" id="categoryDropdown" onchange="fetchData(this)" asp-items="ViewBag.Categories">
+                        <option value="0">@(lang == "En" ? "Select the Category" : "حدد القسم")</option>
+                       
+                    </select>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (error != null || success != null)
+{
+    <div class="card report-card">
+        <div class="card-body pb-0">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <h6>
+                        @if (error != null)
+                        {
+                            <div style="text-align: center;" class="alert alert-danger" role="alert">
+                                @error
+                            </div>
+                        }
+                        @if (success != null)
+                        {
+                            <div style="text-align: center;" class="alert alert-success" role="alert">
+                                @success
+                            </div>
+                        }
+                    </h6>
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="fs-16">@(lang == "En" ? "Product List" : "قائمة المنتجات") </h4>
+        <p class="text-muted fs-14">
+
+        </p>
+    </div>
+
+    <div class="card-body ">
+
+        <div class="table-responsive" >
+
+            <table id="file-datatable" class="table table-bordered text-nowrap key-buttons border-bottom">
+                <thead>
+                <tr>
+                    <th>
+                        @(lang == "En" ? "Product Image" : "صورة المنتج")
+                    </th>
+                    
+                    <th>
+                        @(lang == "En" ? "Product Price" : "سعر المنتج")
+                    </th>
+                    <th>
+                        @(lang == "En" ? "Section Name" : "اسم القسم")
+                    </th>
+                    <th>
+                        @(lang == "En" ? "Product Creator's Name" : "اسم منشئ المنتج")
+                    </th>
+                    
+                    <th>
+                        @(lang == "En" ? "Start Date of Display" : "تاريخ بداية العرض")
+                    </th>
+
+                    <th>
+                        @(lang == "En" ? "End Date of Display" : "تاريخ نهاية العرض")
+                    </th>
+                </tr>
+                </thead>
+                <tbody id="productsPartialView">
+
+                    @if (Model.Any())
+                    {
+                        <partial name="_IndexProductPartialView" model="Model" ></partial>
+                    }
+
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+   
+
+
+    <script>
+
+        function fetchData(el) {
+
+            var categoryId = el.value;
+             $('#loader').show();
+            // Call the backend using AJAX
+            $.ajax({
+                type: 'POST',
+                url: '/Products/IndexFilter',
+                data: { id: categoryId },
+                success: function (result) {
+                    // Update the partial view content
+                    $('#productsPartialView').html(result);
+                    $('#loader').hide();
+                },
+                error: function (error) {
+                    console.error('Error in AJAX request:', error);
+                }
+            });
+        }
+
+
+
+
+    </script>
+
+}

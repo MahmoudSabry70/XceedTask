@@ -1,0 +1,15 @@
+﻿global using Microsoft.AspNetCore.Authentication;
+global using Microsoft.AspNetCore.Authentication.Cookies;
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.AspNetCore.Mvc.Filters;
+global using Microsoft.AspNetCore.Mvc.Rendering;
+global using Microsoft.EntityFrameworkCore;
+global using XceedTask.Core.Entity.ApplicationData;
+global using XceedTask.Core.Helpers;
+global using XceedTask.Core.PermissionsData;
+global using XceedTask.Core.ViewModel.AuthViewModel;
+global using XceedTask.Core.ViewModel.EntityViewModel;
+global using XceedTask.Extensions;
+global using XceedTask.Filters;

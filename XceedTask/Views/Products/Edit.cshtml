@@ -1,0 +1,163 @@
+﻿@model ProductEditViewModel
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var error = TempData["Error"];
+    var success = TempData["Success"];
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+    ViewData["Title"] = lang == "En" ? "Edit  Product" : "تعديل منتج ";
+}
+
+<form class="form-horizontal" asp-action="Edit" enctype="multipart/form-data" id="uploadform">
+<div class="row product-adding">
+<div class="col-xl-8">
+    <div class="card ">
+        <div class="card-header">
+                    <h3 class="card-title"> @(lang == "En" ? "Product Information" : "بيانات المنتج")</h3>
+            @if (error != null)
+            {
+                <div style="text-align: center;" class="alert alert-danger" role="alert">
+                    @error
+                </div>
+            }
+            @if (success != null)
+            {
+                <div style="text-align: center;" class="alert alert-success" role="alert">
+                    @success
+                </div>
+            }
+
+        </div>
+        <div class="card-body mb-0">
+
+               <div asp-validation-summary="All" style="margin-bottom: 2rem; text-align: center;" class="text-danger"></div> 
+
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="ImgUrl"/>
+
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="form-label" asp-for="Name">@(lang == "En" ? "Product Name " : "اسم المنتج ")</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input asp-for="Name" class="form-control" id="examplenameInwputnaeme3" placeholder="@(lang == "En" ? "Product Name " : "اسم المنتج ")">
+                        @* <span asp-validation-for="Name" class="text-danger"></span> *@
+                    </div>
+                </div>
+            </div>
+                    <div class="form-group ">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Price">@(lang == "En" ? "Price" : "السعر")</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input asp-for="Price" class="form-control" id="thePrice" placeholder="@(lang == "En" ? "Price" : "السعر")">
+                              @*   <span asp-validation-for="Price" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <!-- Start Date -->
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="StartDate">
+                                    @(lang == "En" ? "Start Date and Time of Product Display" : "تاريخ ووقت بداية عرض المنتج")
+                                </label>
+                            </div>
+                            <div class="col-md-12">
+                                <input asp-for="StartDate" class="form-control" id="startDate" placeholder="@(lang == "En" ? "Start Date" : "تاريخ بداية العرض")">
+                                @* <span asp-validation-for="StartDate" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <!-- Duration -->
+                            <div class="col-md-6">
+                                <label class="form-label" asp-for="Duration">
+                                    @(lang == "En" ? "End Date and Time of Product Display" : "تاريخ ووقت انتهاء عرض المنتج")
+                                </label>
+                            </div>
+                            <div class="col-md-12">
+                                <input asp-for="Duration" class="form-control" id="duration" placeholder="@(lang == "En" ? "Duration" : "المدة")">
+                               @*  <span asp-validation-for="Duration" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group ">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label asp-for="CategoryId" class="form-label">@(lang == "En" ? "Select Category" : "اختر القسم")</label>
+                            </div>
+                            <div class="col-md-12">
+                                <select id="select-state5" asp-for="CategoryId" class="form-control select-state" asp-items="ViewBag.Categories">
+                                    <option value="">@(lang == "En" ? "Select Category" : "اختر القسم") </option>
+                                </select>
+                                @* <span asp-validation-for="CategoryId" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <label class="form-label" asp-for="ImgFile">@(lang == "En" ? "Product Image" : "صورة المنتج")</label>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="file"
+                                       class="dropify"
+                                       asp-for="ImgFile"
+                                       data-max-file-size="1MB"
+                                       data-max-files="1" id="nameFileInput" />
+
+                               @*  <span asp-validation-for="ImgFile" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                    </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+<div class="col-xl-8">
+  
+    <div class="card ">
+        <div class="card-header">
+            <h3 class="card-title"></h3>
+        </div>
+        <div class="card-body mb-0">
+            <div class="form-group ">
+            </div>
+            <div class="form-group mb-0 row justify-content-end" style="margin-top: 2rem;">
+                <div class="col-md-12" style="display: flex;justify-content: space-between;">
+                    <input type="submit" value="@(lang == "En" ? "Edit" : "تعديل ") " class="btn btn-primary waves-effect waves-light">
+                    <a asp-action="Index" class="btn btn-secondary">@(lang == "En" ? "Back to List" : "العودة للقائمة")</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</form>
+
+
+@section Scripts {
+    @{
+        
+        await Html.RenderPartialAsync("DashboardPartials/_ValidationScriptsPartial");
+        
+
+    }
+    <!-- FILE UPLOADES JS -->
+    <script src="~/assets/plugins/fileuploads/js/fileupload.js"></script>
+    <script src="~/assets/plugins/fileuploads/js/file-upload.js"></script>
+
+}

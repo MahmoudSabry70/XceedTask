@@ -1,0 +1,87 @@
+.btn-outline-primary {
+    --bs-btn-color: #ff4c3b !important;
+    --bs-btn-border-color: #ff4c3b;
+    color: var(--bs-btn-color);
+    border-color: var(--bs-btn-border-color);
+    padding: 0.4rem 1.7rem !important;
+}
+
+    .btn-outline-primary:hover {
+        --bs-btn-hover-color: #f9f3f3;
+        --bs-btn-hover-border-color: #ff4c3b;
+        color: var(--bs-btn-hover-color);
+        border-color: var(--bs-btn-hover-border-color);
+    }
+
+    .btn-outline-primary:focus {
+        --bs-btn-focus-shadow-rgb: 212, 212, 212; /* Change the focus shadow color if needed */
+        box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb), 0.5);
+    }
+
+    .btn-outline-primary:active {
+        --bs-btn-active-color: #ff4c3b;
+        --bs-btn-active-border-color: #ff4c3b;
+        color: var(--bs-btn-active-color);
+        border-color: var(--bs-btn-active-border-color);
+    }
+
+.dropdown-item {
+    margin: auto !important;
+}
+
+    .dropdown-item:hover, .dropdown-item:focus {
+        color: #1e2125;
+        background-color: #ffc5c5;
+        border-radius: .7rem;
+    }
+
+    .dropdown-item.active, .dropdown-item:active {
+        color: #fff;
+        text-decoration: none;
+        background-color: #ff5646;
+    }
+
+td {
+    text-align: center !important;
+    align-items: center !important;
+}
+
+/* Apply to all <th> elements */
+th {
+    text-align: center !important;
+    align-items: center !important;
+}
+
+table, th, td {
+    text-align: center !important;
+    align-items: center !important;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+    padding-top: 20px;
+    white-space: nowrap;
+    padding-left: 2rem;
+}
+
+.selectFount {
+    font-weight: 800;
+    color: var(--theme-color);
+}
+
+@media (max-width: 767px) {
+    /* Apply the table-responsive class when screen width is below 768px */
+    .table-responsive {
+        overflow-x: auto !important;
+    }
+}
+
+@media (min-width: 768px) {
+    /* Remove the table-responsive class when screen width is 768px or larger */
+    .table-responsive {
+        overflow-x: hidden !important;
+    }
+}
+
+.right-class {
+    right: 28rem !important;
+}

@@ -1,0 +1,90 @@
+﻿@model IEnumerable<ProductViewModel>
+@{
+   
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+   
+}
+
+
+@foreach (var item in Model)
+{
+    <tr>
+
+        <td class="sorting_1">
+            <div class="d-flex justify-content-start align-items-center user-name">
+                <div class="avatar-wrapper">
+                    <div class="avatar me-3">
+                        <img src="@item.ImgUrl" alt="Avatar" class="rounded-circle">
+                    </div>
+                </div>
+                <div class="d-flex flex-column">
+                    <a href="javascript:;" class="text-body text-truncate">
+                        <span class="fw-medium">@item.Name</span>
+                    </a>
+
+                </div>
+            </div>
+        </td>
+
+
+
+        <td>
+            @item.Price
+        </td>
+        <td>
+            @item.CategoryName
+        </td>
+        <td>
+            @item.CreatedByFullName
+        </td>
+        <td>
+            @item.StartDate
+        </td>
+        <td>
+            @item.Duration
+        </td>
+        <td>
+            <div class="btn-group mt-2 mb-2">
+                <button type="button" class="btn btn-default btn-pill dropdown-toggle" data-bs-toggle="dropdown">
+                    @(lang == "En" ? "Action" : "الإجراء") <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li class="dropdown-plus-title">
+                        @(lang == "En" ? "Action" : "الإجراء")
+                        <b class="fa fa-angle-up" aria-hidden="true"></b>
+                    </li>
+
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.ProductPermissions.Edit)).Succeeded)
+                    {
+                        <li>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="dropdown-item">@((lang == "En") ? "Edit" : "تعديل")</a>
+                        </li>
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.ProductPermissions.Delete)).Succeeded)
+                    {
+                        <li>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="dropdown-item" onclick="return confirm('@((lang == "En" ? "Are you sure you want to delete this Product?" : "هل أنت متأكد من الحذف؟"))');">
+                                @((lang == "En" ? "Delete" : "حذف"))
+                            </a>
+                        </li>
+
+                    }
+                    @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.ProductUpdatesPermissions.View)).Succeeded)
+                    {
+                        <li>
+                            <a asp-action="Index" asp-controller="ProductUpdates" asp-route-id="@item.Id" class="dropdown-item">@(lang == "En" ? "List of Product Updates" : "قائمة تحديثات المنتج")</a>
+                        </li>
+                    }
+                    <li>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="dropdown-item">@((lang == "En") ? "Details" : "تفاصيل")</a>
+                    </li>
+
+                </ul>
+            </div>
+        </td>
+
+
+
+
+    </tr>
+}

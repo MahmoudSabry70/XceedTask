@@ -1,0 +1,99 @@
+﻿@model Category
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var error = TempData["Error"];
+    var success = TempData["Success"];
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+    ViewData["Title"] = lang == "En" ? "Edit Main Category" : "تعديل قسم رئيسي";
+}
+
+
+
+<div class="row">
+    <div class="col-xl-8">
+        <div class="card m-b-20">
+            <div class="card-header">
+                <h3 class="card-title">@(lang == "En" ? "Edit Main Category" : "تعديل قسم رئيسي")</h3>
+                @if (error != null)
+                {
+                    <div style="text-align: center;" class="alert alert-danger" role="alert">
+                        @error
+                    </div>
+                }
+                @if (success != null)
+                {
+                    <div style="text-align: center;" class="alert alert-success" role="alert">
+                        @success
+                    </div>
+                }
+
+            </div>
+            <div class="card-body mb-0">
+                <form class="form-horizontal" asp-action="Edit" enctype="multipart/form-data" id="uploadform">
+                    <div asp-validation-summary="All" style="margin-bottom: 2rem; text-align: center;" class="text-danger"></div>
+
+                    <input type="hidden" asp-for="Id" />
+                   
+
+
+                    <div class="form-group ">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label" asp-for="Name">@(lang == "En" ? "Category Name (English)" : "اسم القسم بالانجليزي")</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input asp-for="Name" class="form-control" id="examplenameInputnaeme3" placeholder="@(lang == "En" ? "Category Name (English)" : "اسم القسم بالانجليزي")">
+   
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label" asp-for="NameAr">  @(lang == "En" ? "Category Name (Arabic)" : "اسم القسم بالعربي")</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input type="text" asp-for="NameAr" class="form-control" id="examplenameIe3" placeholder=" @(lang == "En" ? "Category Name (Arabic)" : "اسم القسم بالعربي")">
+                
+                            </div>
+                        </div>
+                    </div>
+
+                   
+
+
+
+
+                    <div class="form-group ">
+                    </div>
+                    <div class="form-group mb-0 row justify-content-end" style="margin-top: 2rem;">
+                        <div class="col-md-9" style="display: flex;justify-content: space-between;">
+                            <input type="submit" value="@((lang == "En") ? "Edit" : "تعديل ") " class="btn btn-primary waves-effect waves-light">
+                            <a asp-action="Index" class="btn btn-secondary">@((lang == "En" ? "Back to List" : "العودة للقائمة"))</a>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{
+       
+        await Html.RenderPartialAsync("DashboardPartials/_ValidationScriptsPartial");
+
+    }
+   
+      
+    
+
+}
+
+
+

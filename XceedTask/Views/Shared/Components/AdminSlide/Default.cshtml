@@ -1,0 +1,246 @@
+﻿@{
+    var userData = UserManager.FindByNameAsync(User.Identity?.Name ?? string.Empty).Result ;
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+}
+
+
+<!--APP-SIDEBAR-->
+<div class="sticky">
+    <div class="app-sidebar__overlay" data-bs-toggle="sidebar"></div>
+    <div class="app-sidebar">
+        <div class="side-header">
+
+            <a class="header-brand1" asp-action="Index" asp-controller="Dashboard">
+                    <img src="~/assets/images/brand/logo-white.png" class="header-brand-img desktop-logo" alt="logo">
+                <img src="~/assets/images/brand/icon-white.png" class="header-brand-img toggle-logo"
+                     alt="logo">
+                <img src="~/assets/images/brand/icon-dark.png" class="header-brand-img light-logo" alt="logo">
+                <img src="~/assets/images/brand/logo-dark.png" class="header-brand-img light-logo1"
+                     alt="logo">
+            </a>
+            
+            <!-- LOGO -->
+        </div>
+
+
+        <div class="main-sidemenu">
+            <div class="slide-left disabled" id="slide-left">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z" />
+                </svg>
+            </div>
+            <ul class="side-menu">
+
+                @if (userData == null )
+                {
+                    <li class="sub-category">
+                        <h3>@(lang == "En" ? "Products" : "المنتجات")</h3>
+                    </li>
+                    <li class="slide">
+                        <a class="side-menu__item has-link" data-bs-toggle="slide" asp-action="Index" asp-controller="Products">
+                            <i class="side-menu__icon fe fe-package"></i><span class="side-menu__label">@(lang == "En" ? "List of Products" : "قائمة المنتجات")</span>
+                        </a>
+                    </li>
+                }
+            @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.DashboardPermissions.View)).Succeeded)
+            {
+                    <li class="sub-category">
+                        <h3>@(lang == "En" ? "Main" : "الرئيسية")</h3>
+                    </li>
+                    <li class="slide">
+                        <a class="side-menu__item has-link" data-bs-toggle="slide" asp-action="Index" asp-controller="Dashboard">
+                        <i class="side-menu__icon fe fe-home"></i><span class="side-menu__label">@(lang == "En" ? "Dashboard" : "لوحة التحكم")</span>
+                    </a>
+                </li>
+            }
+            @if (
+                  (await AuthorizationService.AuthorizeAsync(User, Permissions.UsersPermissions.View)).Succeeded ||
+                  (await AuthorizationService.AuthorizeAsync(User, Permissions.RolesPermissions.Create)).Succeeded ||
+                (await AuthorizationService.AuthorizeAsync(User, Permissions.RolesPermissions.View)).Succeeded )
+                {
+
+                    <li class="sub-category">
+                        <h3>@(lang == "En" ? "User Accounts" : "حسابات المستخدمين")</h3>
+                    </li>
+                    <li class="slide">
+                        <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
+                            <i class="side-menu__icon fe fe-layers"></i><span class="side-menu__label">@(lang == "En" ? "Admins and customers" : "المسؤولين والعملاء ")</span><i class="angle fe fe-chevron-right"></i>
+                        </a>
+
+                        <ul class="slide-menu">
+                            <li class="panel sidetab-menu">
+                                <div class="tab-menu-heading p-0 pb-2 border-0">
+                                    <div class="tabs-menu ">
+                                        <!-- Tabs -->
+                                        <ul class="nav panel-tabs">
+                                            <li><a href="#side9" class="d-flex active" data-bs-toggle="tab"><i class="fe fe-monitor me-2"></i><p>Home</p></a></li>
+                                            <li><a href="#side10" data-bs-toggle="tab" class="d-flex"><i class="fe fe-message-square me-2"></i><p>Chat</p></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="panel-body tabs-menu-body p-0 border-0">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="side9">
+                                            <ul class="sidemenu-list">
+
+                                                @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.UsersPermissions.View)).Succeeded || (await AuthorizationService.AuthorizeAsync(User, Permissions.UsersPermissions.Create)).Succeeded)
+                                                {
+                                                    <li class="sub-slide">
+                                                        <a class="sub-side-menu__item" data-bs-toggle="sub-slide" href="javascript:void(0)">
+                                                            <span class="sub-side-menu__label">@(lang == "En" ? "Admins" : "المسؤولين")</span><i class="sub-angle fe fe-chevron-right"></i>
+                                                        </a>
+                                                        <ul class="sub-slide-menu">
+                                                            @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.UsersPermissions.View)).Succeeded)
+                                                            {
+                                                                <li>
+                                                                    <a asp-action="Index" asp-controller="ApplicationUsers" class="sub-slide-item">@(lang == "En" ? "Admin List" : "قائمة بكل المسؤولين")</a>
+                                                                </li>
+                                                            }
+                                                            @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.UsersPermissions.Create)).Succeeded)
+                                                            {
+                                                                <li>
+                                                                    <a asp-action="Create" asp-controller="ApplicationUsers" class="sub-slide-item">@(lang == "En" ? "Create new Admin " : "أنشاء حساب جديد لمسؤول")</a>
+                                                                </li>
+                                                            }
+
+                                                        </ul>
+                                                    </li>
+                                                }
+                                                @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.RolesPermissions.View)).Succeeded || (await AuthorizationService.AuthorizeAsync(User, Permissions.RolesPermissions.View)).Succeeded)
+                                                {
+                                                    <li class="sub-slide">
+                                                        <a class="sub-side-menu__item" data-bs-toggle="sub-slide" href="javascript:void(0)">
+                                                            <span class="sub-side-menu__label">@(lang == "En" ? "Roles" : "الصلاحيات")</span><i class="sub-angle fe fe-chevron-right"></i>
+                                                        </a>
+                                                        <ul class="sub-slide-menu">
+                                                            @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.RolesPermissions.View)).Succeeded)
+                                                            {
+                                                                <li>
+                                                                    <a asp-action="Index" asp-controller="ApplicationRoles" class="sub-slide-item">
+                                                                        @(lang == "En" ? "Roles List" : "قائمة بكل الصلاحيات")
+                                                                        </a>
+                                                                </li>
+                                                            }
+                                                            @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.RolesPermissions.Create)).Succeeded)
+                                                            {
+                                                                <li>
+                                                                    <a asp-action="Create" asp-controller="ApplicationRoles" class="sub-slide-item">
+                                                                        @(lang == "En" ? "Create new Role " : "أنشاء صلاحية جديدة")
+                                                                        </a>
+                                                                </li>
+                                                            }
+
+                                                        </ul>
+                                                    </li>
+                                                }
+                                               
+
+                                               
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                    </li>
+                }
+
+
+                @if (
+               (await AuthorizationService.AuthorizeAsync(User, Permissions.CategoryPermissions.View)).Succeeded )
+                {
+
+                    <li class="sub-category">
+                        <h3>@(lang == "En" ? "Categories" : "الاقسام")</h3>
+                    </li>
+
+                    <li class="slide">
+                        <a class="side-menu__item has-link" data-bs-toggle="slide" asp-action="Index" asp-controller="Categories">
+                            <i class="side-menu__icon fa fa-th"></i><span class="side-menu__label">@(lang == "En" ? "List of Categories" : "قائمة بالأقسام")</span>
+                        </a>
+                    </li>
+
+             }
+
+                @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.ProductPermissions.View)).Succeeded ||
+                (await AuthorizationService.AuthorizeAsync(User, Permissions.ProductPermissions.Create)).Succeeded)
+                {
+                    <li class="slide">
+                        <a class="side-menu__item" data-bs-toggle="slide" href="javascript:void(0)">
+                            <i class="side-menu__icon fa fa-plane"></i>
+                            <span class="side-menu__label">@(lang == "En" ? "Products" : "المنتجات")</span>
+                            <i class="angle fe fe-chevron-right"></i>
+                        </a>
+
+
+                        <ul class="slide-menu">
+                            <li class="panel sidetab-menu">
+                                <div class="tab-menu-heading p-0 pb-2 border-0">
+                                    <div class="tabs-menu ">
+                                        <!-- Tabs -->
+                                        <ul class="nav panel-tabs">
+                                            <li><a href="#side9" class="d-flex active" data-bs-toggle="tab"><i class="fe fe-monitor me-2"></i><p>Home</p></a></li>
+                                            <li><a href="#side10" data-bs-toggle="tab" class="d-flex"><i class="fe fe-message-square me-2"></i><p>Chat</p></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="panel-body tabs-menu-body p-0 border-0">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="side9">
+                                            <ul class="sidemenu-list">
+
+
+
+
+                                                @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.ProductPermissions.View)).Succeeded)
+                                                {
+                                                    <li>
+                                                        <a asp-action="IndexForAdmin" asp-controller="Products" class="sub-slide-item">@(lang == "En" ? "List of All Products" : "قائمة بكل المنتجات")</a>
+                                                    </li>
+                                                }
+                                                <li>
+                                                    <a asp-action="Index" asp-controller="Products" class="sub-slide-item">@(lang == "En" ? "List of current products" : " قائمة المنتجات الحالية")</a>
+                                                </li>
+                                                @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.ProductPermissions.Create)).Succeeded)
+                                                {
+                                                    <li>
+                                                        <a asp-action="Create" asp-controller="Products" class="sub-slide-item">@(lang == "En" ? "Create a New Product" : "إنشاء منتج جديد")</a>
+                                                    </li>
+                                                }
+
+
+
+
+
+                                            </ul>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                }
+
+       </ul>
+
+
+
+            <div class="slide-right" id="slide-right">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
+                     width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z" />
+                </svg>
+            </div>
+        
+        
+        </div>
+    </div>
+</div>
+<!--/APP-SIDEBAR-->

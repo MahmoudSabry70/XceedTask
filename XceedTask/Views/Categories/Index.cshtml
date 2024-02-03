@@ -1,0 +1,99 @@
+﻿@model IEnumerable<CategoryViewModel>
+
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var error = TempData["Error"];
+    var success = TempData["Success"];
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+    ViewData["Title"] = (lang == "En" ? "Main Category List" : "قائمة بالأقسام الرئيسية");
+
+
+}
+
+
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h5> @((lang == "En" ? "Main Category List" : "قائمة بالأقسام الرئيسية")) </h5>
+            @if (error != null)
+            {
+                <div style="text-align: center;" class="alert alert-danger" role="alert">
+                    @error
+                </div>
+            }
+            @if (success != null)
+            {
+                <div style="text-align: center;" class="alert alert-success" role="alert">
+                    @success
+                </div>
+            }
+
+        </div>
+        <div class="card-body ">
+            <table id="file-datatable" class="table table-bordered text-nowrap key-buttons border-bottom">
+                <thead>
+                    <tr>
+                        <th> @(lang == "Ar" ? "اسم القسم " : "Category Name") </th>
+                       
+                        <th> @(lang == "En" ? "Number of Products in the Category" : "عدد المنتجات في القسم")</th>
+                        <th> @(lang == "Ar" ? "التحكم" : "Action") </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.Name
+                            </td>
+
+
+                            <td>
+                               @item.ProductCount
+                            </td>
+                          
+
+
+
+                            <td>
+                                <div class="item-action">
+                                    <button class="btn btn-outline-primary" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @((lang == "En") ? "Action" : "الإجراء") <i class="fa fa-sort-desc fs-5 ms-1" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="dropdown-menu" style="text-align: center; border-radius: 1rem;">
+
+                                        @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.CategoryPermissions.Edit)).Succeeded)
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="dropdown-item">@((lang == "En") ? "Edit" : "تعديل")</a>
+
+                                        }
+                                   
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="dropdown-item">@((lang == "En") ? "Details" : "تفاصيل")</a>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("DashboardPartials/_ValidationScriptsPartial");
+
+    }
+
+
+
+
+
+}
+

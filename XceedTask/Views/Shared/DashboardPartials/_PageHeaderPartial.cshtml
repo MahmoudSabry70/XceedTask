@@ -1,0 +1,14 @@
+﻿@model string
+@{
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+}
+
+<div class="page-header">
+    <h1 class="page-title">@Model</h1>
+    <div>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Dashboard" asp-action="Index">@(lang == "En" ? "Home" : "الصفحة الرئيسية")</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model</li>
+        </ol>
+    </div>
+</div>

@@ -1,0 +1,147 @@
+﻿@model IEnumerable<XceedTask.Core.Entity.ApplicationData.ApplicationRole>
+
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var error = TempData["Error"];
+    var success = TempData["Success"];
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+    ViewData["Title"] = lang == "En" ? "Roles List" : "قائمة الأدوار";
+
+    var num = 1;
+}
+
+
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h5> @(lang == "En" ? "Roles List" : "قائمة الأدوار") </h5>
+            @if (error != null)
+            {
+                <div style="text-align: center;" class="alert alert-danger" role="alert">
+                    @error
+                </div>
+            }
+            @if (success != null)
+            {
+                <div style="text-align: center;" class="alert alert-success" role="alert">
+                    @success
+                </div>
+            }
+
+        </div>
+        <div class="card-body ">
+            <table id="file-datatable" class="table table-bordered text-nowrap key-buttons border-bottom">
+                <thead>
+                <tr>
+                    <th>@(lang == "En" ? "Number" : "الرقم") </th>
+                    <th>@(lang == "En" ? "Name" : "الاسم") </th>
+                    <th> @(lang == "En" ? "Description" : "الوصف")</th>
+                    <th> @(lang == "Ar" ? "التحكم" : "Action") </th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="">
+
+                                <span> @num</span>
+                            </div>
+
+                        </td>
+
+
+                        <td class="selectFount">
+                            @if (lang == "En")
+                            {
+                                @item.Name
+                            }
+                            else
+                            {
+                                @item.NameAr
+                            }
+
+                        </td>
+
+
+                        <td class="">
+                            
+                                @item.Description
+                            
+                           
+
+                        </td>
+
+
+                        <td>
+                            <div class="btn-group mt-2 mb-2">
+                                <button type="button" class="btn btn-default btn-pill dropdown-toggle" data-bs-toggle="dropdown">
+                                    @(lang == "En" ? "Action" : "الإجراء") <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li class="dropdown-plus-title">
+                                        @(lang == "En" ? "Action" : "الإجراء")
+                                        <b class="fa fa-angle-up" aria-hidden="true"></b>
+                                    </li>
+
+                                    @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.RolesPermissions.Edit)).Succeeded)
+                                    {
+                                        <li>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="dropdown-item">@(lang == "En" ? "Edit" : "تعديل")</a>
+                                        </li>
+                                    }
+                                    @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.RolesPermissions.Delete)).Succeeded)
+                                    {
+                                        <li>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" style="margin: 0.3rem" class="dropdown-item"
+                                               onclick="return confirm('@(lang == "En" ? "Are you sure you want to delet this ?" : "هل أنت متأكد من حذف هذا ؟")');">
+                                                @(lang == "En" ? "Delete" : "حذف")
+                                            </a>
+                                        </li>
+                                    }
+                                    @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.RolesPermissions.Edit)).Succeeded)
+                                    {
+                                        <li class="divider"></li>
+
+
+                                        <li>
+                                            <a asp-action="ManagePermissions" asp-route-id="@item.Id" class="dropdown-item">
+                                                @(lang == "En" ? "Manage Permissions" : "إدارة الصلاحيات")
+                                            </a>
+                                        </li>
+                                    }
+
+
+
+
+
+                                </ul>
+                            </div>
+
+
+                        </td>
+                    </tr>
+                    num++;
+                }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("DashboardPartials/_ValidationScriptsPartial");
+
+    }
+
+
+
+
+
+}

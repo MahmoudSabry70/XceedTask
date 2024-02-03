@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ProductViewModel>
+
+
+@foreach (var item in Model)
+{
+    <tr>
+       
+            <td class="sorting_1">
+                <div class="d-flex justify-content-start align-items-center user-name">
+                    <div class="avatar-wrapper">
+                        <div class="avatar me-3">
+                            <img src="@item.ImgUrl" alt="Avatar" class="rounded-circle">
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <a href="javascript:;" class="text-body text-truncate">
+                            <span class="fw-medium">@item.Name</span>
+                        </a>
+                      
+                    </div>
+                </div>
+            </td>
+       
+
+
+        <td>
+            @item.Price
+        </td>
+        <td>
+            @item.CategoryName
+        </td>
+        <td>
+            @item.CreatedByFullName
+        </td>
+        <td>
+            @item.StartDate
+        </td>
+        <td>
+            @item.Duration
+        </td>
+                          
+
+
+
+       
+    </tr>
+}

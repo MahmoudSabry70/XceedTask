@@ -1,0 +1,100 @@
+﻿@model XceedTask.Core.ViewModel.DashboardCounts
+
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+    ViewBag.Title = "لوحة تحكم المسؤول";
+}
+
+
+<!-- ROW-1 OPEN -->
+<div class="row">
+    <div class="col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@(lang == "En" ? "Number of Products" : "عدد المنتجات")</h3>
+
+            </div>
+            <div class="card-body">
+                <p style="text-align: center;">@(lang == "En" ? "The ratio between the numbers of products" : "النسبة بين أعداد المنتجات ")</p>
+                <div id="chart-pie-Products" class="chartsh"></div>
+            </div>
+        </div>
+    </div>
+  
+</div>
+<!-- ROW-1 CLOSED -->
+
+
+
+@section Scripts {
+
+    <!-- PIETY CHART JS-->
+    <script src="~/assets/plugins/peitychart/jquery.peity.min.js"></script>
+    <script src="~/assets/plugins/peitychart/peitychart.init.js"></script>
+    <script src="~/assets/plugins/charts-c3/d3.v5.min.js"></script>
+    <script src="~/assets/plugins/charts-c3/c3-chart.js"></script>
+    <script src="~/assets/js/charts.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+    <script>
+        /* Users */
+        var chart = c3.generate({
+            bindto: '#chart-pie-Products', // id of chart wrapper
+            data: {
+                columns: [
+                    // each columns data
+                    ['data1', @Model.AllProducts],
+                    ['data2', @Model.ShowProducts],
+                    ['data3', @Model.AllCategories],
+                   
+              
+                ],
+                type: 'pie', // default type of chart
+                colors: {
+                    data1: '#6c5ffc',
+                    data2: '#05c3fb',
+                    data3: '#09ad95',
+                    data4: '#1170e4'
+                },
+                names: {
+                    // name of each serie
+                    'data1': '@(lang == "En" ? "All Products" : "كل المنتجات")',
+                    'data2': '@(lang == "En" ? "Visible Products" : "المنتجات الظاهرة")',
+                    'data3': '@(lang == "En" ? "All Sections" : "كل الأقسام")',
+                   
+                    
+                }
+            },
+            tooltip: {
+                format: {
+                    title: function (d) {
+                        return 'Data ' + d;
+                    },
+                    value: function (value, ratio, id) {
+                        return value + ' (' + (ratio * 100).toFixed(2) + '%)';
+                    }
+                }
+            },
+            axis: {},
+            legend: {
+                show: false, //hide legend
+            },
+            padding: {
+                bottom: 0,
+                top: 0
+            },
+        });
+
+        /*Day Order*/
+       
+       
+
+      
+    </script>
+
+    
+
+
+}

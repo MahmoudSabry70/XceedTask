@@ -1,0 +1,76 @@
+﻿@model XceedTask.Core.Entity.ApplicationData.ApplicationRole
+
+@{
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+    ViewData["Title"] = (lang == "En" ? "Edit Role Data" : "تعديل بيانات الدور");
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xl-8">
+        <div class="card m-b-20">
+            <div class="card-header">
+                <h3 class="card-title"> @(lang == "En" ? "Edit Role Data" : "تعديل بيانات الدور")</h3>
+            </div>
+            <div class="card-body mb-0">
+                <form class="form-horizontal" asp-action="Edit" enctype="multipart/form-data" runat="server">
+                    @*<div asp-validation-summary="All" style="margin-bottom: 2rem; text-align: center;" class="text-danger"></div>*@
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label asp-for="NameAr" class="control-label">@((lang == "En" ? "Title (Arabic)" : "الاسم (بالعربية)"))</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input asp-for="NameAr" class="form-control" placeholder="@((lang == "En" ? "Enter title in Arabic" : "أدخل الاسم بالعربية"))" />
+                                <span asp-validation-for="NameAr" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label asp-for="Name" class="control-label">@((lang == "En" ? "Title (English)" : "الاسم (بالإنجليزية)"))</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input asp-for="Name" class="form-control" placeholder="@((lang == "En" ? "Enter title in English" : "أدخل الاسم بالإنجليزية"))" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label" asp-for="Description"> @Html.Raw(lang == "En" ? " Details (English)" : "تفاصيل  بالإنجليزي")</label>
+                            </div>
+                            <div class="col-md-9">
+                                <input asp-for="Description" class="form-control" placeholder=" @(lang == "En" ? " Details (English)" : "تفاصيل  بالإنجليزي")">
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                   
+
+                    <div class="form-group mb-0 row justify-content-end" style="margin-top: 2rem;">
+                        <div class="col-md-9" style="display: flex;justify-content: space-between;">
+                            <input type="submit" value="@((lang == "En" ? "Edit" : "تعديل"))" class="btn btn-primary waves-effect waves-light">
+                            <a asp-action="Index" class="btn btn-secondary">@((lang == "En" ? "Back to List" : "العودة للقائمة"))</a>
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("DashboardPartials/_ValidationScriptsPartial");
+    }
+}
+

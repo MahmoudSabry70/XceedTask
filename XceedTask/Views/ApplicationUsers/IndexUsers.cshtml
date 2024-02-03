@@ -1,0 +1,194 @@
+﻿@model IEnumerable<ApplicationUserIndexViewModel>
+
+@{
+
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var error = TempData["Error"];
+    var success = TempData["Success"];
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+    ViewData["Title"] = (lang == "En" ? "Customer List" : "قائمة بالعملاء");
+
+
+}
+
+
+
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h5> @((lang == "En" ? "Customer List" : "قائمة بالعملاء")) </h5>
+            @if (error != null)
+            {
+                <div style="text-align: center;" class="alert alert-danger" role="alert">
+                    @error
+                </div>
+            }
+            @if (success != null)
+            {
+                <div style="text-align: center;" class="alert alert-success" role="alert">
+                    @success
+                </div>
+            }
+
+        </div>
+        <div class="card-body ">
+            <div class="table-responsive">
+                <table id="file-datatable" class="table table-bordered text-nowrap key-buttons border-bottom">
+                <thead>
+                    <tr>
+                        <th> @(lang == "Ar" ? "الصورة" : "Image") </th>
+                        <th> @(lang == "Ar" ? "الاسم" : "Name") </th>
+                        <th> @(lang == "Ar" ? "رقم الهاتف" : "Phone Number") </th>
+                        <th> @(lang == "Ar" ? "البريد الإلكتروني" : "Email") </th>
+                          
+                        <th> @(lang == "Ar" ? "التحكم" : "Action") </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="sorting_1">
+                                <div class="d-flex justify-content-start align-items-center user-name">
+                                    <div class="avatar-wrapper">
+                                        <div class="avatar me-3">
+                                            <img src="@item.UserImgUrl" alt="Avatar" class="rounded-circle">
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <a href="javascript:;" class="text-body text-truncate">
+                                            <span class="fw-medium">@item.FullName</span>
+                                        </a>
+                                        <small class="text-muted">@item.Email</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PhoneNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                               
+
+                            <td>
+                                <div class="btn-group mt-2 mb-2">
+                                    <button type="button" class="btn btn-default btn-pill dropdown-toggle" data-bs-toggle="dropdown">
+                                        @((lang == "En") ? "Action" : "الإجراء")  <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li class="dropdown-plus-title">
+                                            @((lang == "En") ? "Action" : "الإجراء") 
+                                            <b class="fa fa-angle-up" aria-hidden="true"></b>
+                                        </li>
+
+                                    @if ((await AuthorizationService.AuthorizeAsync(User, Permissions.UsersPermissions.Edit)).Succeeded)
+                                        {
+                                            @if (@item.Status)
+                                            {
+
+                                                <a asp-action="Suspend" asp-route-id="@item.Id" style="margin: 0.3rem" class="dropdown-item" onclick="return confirm('@((lang == "En") ? "Are you sure you want to suspend this account?" : "هل أنت متأكد من إيقاف هذا الحساب؟")');">
+                                                    @((lang == "En") ? "Suspend Account" : "إيقاف الحساب")
+                                                </a>
+
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="Activate" class="dropdown-item" style="margin: 0.3rem" asp-route-id="@item.Id" onclick="return confirm('@((lang == "En") ? "Are you sure you want to activate this account?" : "هل أنت متأكد من تشغيل هذا الحساب؟")');">
+                                                    @((lang == "En") ? "Activate Account" : "تشغيل الحساب")
+                                                </a>
+                                            }
+                                          
+                                        }
+                                    </ul>
+                                </div>
+
+                             
+                            </td>
+                               
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Container-fluid Ends-->
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("DashboardPartials/_ValidationScriptsPartial");
+
+    }
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function changePermissibleLimit(userId, ) {
+            debugger;
+            var limit = $(`#inputSaveLimit`).val();
+            // Display Swal.fire with an input for the amount
+            Swal.fire({
+                title: '@(lang == "En" ? "Change the Allowed Limit for Joining Associations" : "قم بتغيير الحد المسموح للدخول في الجمعيات")',
+                input: 'number',
+                inputValue : limit,
+                inputAttributes: {
+                    autocapitalize: 'off',
+                    min: 1
+                },
+                showCancelButton: true,
+                confirmButtonText: '@(lang == "En" ? "Confirm" : "تأكيد")',
+                cancelButtonText: '@(lang == "En" ? "Cancel" : "ألغاء")',
+                showLoaderOnConfirm: true,
+                preConfirm: (amount) => {
+                    // Use AJAX to send the amount to your server
+                    return $.ajax({
+                        url: '/ApplicationUsers/ChangePermissibleLimit', // Replace with the actual URL of your server-side action
+                        method: 'POST',
+                        data: {
+                            userId: userId,
+                            permissibleLimit: amount
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (!response.success) {
+                                throw new Error(response.message);
+                            }
+                        },
+                        error: function (error) {
+                            Swal.showValidationMessage(
+                                `Request failed: ${error.responseText}`
+                            );
+                        }
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (result.value) {
+                        Swal.fire({
+                            title: `${result.value.message}`,
+                            icon: 'success'
+                        });
+                        $(`#PermissibleLimit-${userId}`).text(result.value.newPermissibleLimit);
+                        $(`#inputSaveLimit`).val(result.value.permissibleLimitNumber);
+                    } else {
+                        Swal.fire({
+                            title: 'Invalid Amount',
+                            icon: 'error'
+                        });
+                    }
+                }
+            });
+        }
+    </script>
+
+
+
+}
+

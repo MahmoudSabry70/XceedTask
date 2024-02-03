@@ -1,0 +1,125 @@
+﻿@model IEnumerable<ProductUpdatesViewModel>
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var error = TempData["Error"];
+    var success = TempData["Success"];
+    var lang = HttpContextAccessor.HttpContext?.Request.Cookies["lang"] ?? "En";
+    ViewData["Title"] = " كل تحديثات المنتج ";
+}
+
+
+@if (error != null || success != null)
+{
+    <div class="card report-card">
+        <div class="card-body pb-0">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <h6>
+                        @if (error != null)
+                        {
+                            <div style="text-align: center;" class="alert alert-danger" role="alert">
+                                @error
+                            </div>
+                        }
+                        @if (success != null)
+                        {
+                            <div style="text-align: center;" class="alert alert-success" role="alert">
+                                @success
+                            </div>
+                        }
+                    </h6>
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4 class="fs-16">@(lang == "En" ? "List of Product Updates" : "قائمة تحديثات المنتج") </h4>
+        <p class="text-muted fs-14">
+
+        </p>
+    </div>
+
+    <div class="card-body ">
+
+        <div class="table-responsive" >
+
+            <table id="file-datatable" class="table table-bordered text-nowrap key-buttons border-bottom">
+                <thead>
+                <tr>
+                    <th>
+                        @(lang == "En" ? "Product Image" : "صورة المنتج")
+                    </th>
+                    
+                   
+                    <th>
+                        @(lang == "En" ? "Name of the Administrator who Updated" : "اسم المسؤول الذي قام بالتحديث")
+                    </th>
+                    
+                    <th>
+                        @(lang == "En" ? "Date of Modification" : "تاريخ التعديل")
+                    </th>
+
+                 
+                </tr>
+                </thead>
+                <tbody >
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+       
+                        <td class="sorting_1">
+                            <div class="d-flex justify-content-start align-items-center user-name">
+                                <div class="avatar-wrapper">
+                                    <div class="avatar me-3">
+                                        <img src="@item.ProductImgUrl" alt="Avatar" class="rounded-circle">
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <a href="javascript:;" class="text-body text-truncate">
+                                        <span class="fw-medium">@item.ProductName</span>
+                                    </a>
+                      
+                                </div>
+                            </div>
+                        </td>
+       
+
+
+                        <td>
+                            @item.UpdatedByFullName
+                        </td>
+                        <td>
+                            @item.UpdateDate
+                        </td>
+                        
+                    
+
+
+
+       
+                    </tr>
+                }
+                    
+
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+
+}

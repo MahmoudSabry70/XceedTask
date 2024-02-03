@@ -1,0 +1,23 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IAuthorizationService AuthorizationService
+@inject IUnitOfWork UnitOfWork
+
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Globalization
+@using XceedTask.Core.Entity.ApplicationData
+@using XceedTask.Services.Interfaces
+@using Microsoft.AspNetCore.Http.Extensions
+@using XceedTask.Extensions
+@using XceedTask.Core.PermissionsData
+@using XceedTask.Core.Helpers
+@using XceedTask.Core.ViewModel.AuthViewModel
+@using XceedTask.Core.ViewModel.EntityViewModel
+@using XceedTask.Core.Entity.ProductData
+@using XceedTask.DataAccess.Interfaces
